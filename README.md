@@ -2,7 +2,10 @@
 
 # Banking Account Updater
 
-Automation solution for updating banking details and payment information through the web application.
+Automation solution for updating banking details and payment information through the web application. 
+It has 2 solutions: 
+1. A web scraping.
+2. A Python client.
 
 ## Tech Stack
 
@@ -21,6 +24,10 @@ Automation solution for updating banking details and payment information through
 ├── .gitignore
 ├── README.md
 ├── requirements.txt
+├── api client/
+│   ├── api_client.py
+│   ├── exceptions.py
+│   └── run.py
 └── web scraping/
     ├── conftest.py
     ├── pages/
@@ -31,7 +38,7 @@ Automation solution for updating banking details and payment information through
         └── test_account_page.py
 ```
 
-## Setup for web scraping testing
+## Setup for web scraping part
 
 ### 1. Clone the repository
 
@@ -78,9 +85,15 @@ MFA_CODE=1234
 
 > Note: avoid using reserved names like `USERNAME` on Windows because the OS may already set `USERNAME`.
 
-## Running the tests
+## Running the web scraping tool: 
 
-From the repository root:
+recommended one: because an actual navigator tap will open
+
+```bash
+pytest -s --headed --slowmo 1000 
+```
+
+or from the repository root:
 
 ```bash
 pytest -s "web scraping/tests/test_account_page.py"
@@ -92,14 +105,57 @@ or to run the full suite:
 pytest -s "web scraping/tests"
 ```
 
-or another cool way to see it running:
+## Setup for the API client
+
+The Python API client is a simple synchronous script that uses `requests` and `.env` values.
+
+1. Activate the virtual environment:
+
+#### Linux / macOS
 
 ```bash
-pytest -s --headed --slowmo 1000 
+source .venv/bin/activate
 ```
+
+#### Windows PowerShell
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+2. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Create or update `.env` with your API credentials:
+
+```env
+LOGIN_USERNAME=username@test.com
+LOGIN_PASSWORD=P@ssword123!
+MFA_CODE=1234
+```
+
+4. Run the client from the repository root:
+
+#### Linux / macOS
+
+```bash
+python "api client/run.py"
+```
+
+#### Windows PowerShell
+
+```powershell
+python "api client/run.py"
+```
+
+This will print the banking and payment update responses in the terminal.
 
 ## Notes
 
 - Sensitive information is stored in `.env`.
 - The `.env` file is excluded from version control.
 - Stable selectors (`id` and `data-testid`) are used throughout the automation.
+
