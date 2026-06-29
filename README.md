@@ -14,18 +14,24 @@ Automation solution for updating banking details and payment information through
 
 ```text
 .
-├── pages/
-│   ├── login_page.py
-│   └── account_page.py
-├── tests/
-│   └── test_account_update.py
-├── .env.example
+├── .github/
+│   └── workflows/
+│       └── python-tests.yml
+├── .env
+├── .gitignore
+├── README.md
 ├── requirements.txt
-├── Makefile
-└── README.md
+└── web scraping/
+    ├── conftest.py
+    ├── pages/
+    │   ├── __init__.py
+    │   ├── account_page.py
+    │   └── login_page.py
+    └── tests/
+        └── test_account_page.py
 ```
 
-## Setup
+## Setup for web scraping testing
 
 ### 1. Clone the repository
 
@@ -53,43 +59,43 @@ python -m venv .venv
 ### 3. Install dependencies
 
 ```bash
-make setup
-```
-
-or manually:
-
-```bash
 pip install -r requirements.txt
 playwright install
 ```
 
 ### 4. Configure environment variables
 
-Create a `.env` file from `.env.example`:
-
-```bash
-cp .env.example .env
-```
+Create a `.env` file in the repository root with your test values. Change it with your data
 
 Example:
 
 ```env
-BASE_URL=https://example.com
-USERNAME=test_user
-PASSWORD=test_password
-MFA_CODE=123456
+BASE_URL=https://marketplace.dev-challenge.com/login
+LOGIN_USERNAME=username@test.com
+LOGIN_PASSWORD=P@ssword123!
+MFA_CODE=1234
 ```
+
+> Note: avoid using reserved names like `USERNAME` on Windows because the OS may already set `USERNAME`.
 
 ## Running the tests
 
+From the repository root:
+
 ```bash
-make test
+pytest -s "web scraping/tests/test_account_page.py"
 ```
 
-or
+or to run the full suite:
 
 ```bash
-pytest
+pytest -s "web scraping/tests"
+```
+
+or another cool way to see it running:
+
+```bash
+pytest -s --headed --slowmo 1000 
 ```
 
 ## Notes
